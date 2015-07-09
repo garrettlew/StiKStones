@@ -1,1 +1,1 @@
-# Stik-Balance
+# StiKs and Stones
