@@ -1,7 +1,7 @@
 import Foundation
 
 enum GameState {
-    case Playing, GameOver
+    case Ready, Playing, GameOver
 }
 
 class MainScene: CCNode {
@@ -23,9 +23,11 @@ class MainScene: CCNode {
     
     var pivotJoint: CCPhysicsJoint?
     
-    var gameState: GameState = .Playing
+    var gameState: GameState = .Ready
     
     var stones : [CCNode] = []
+    
+    var yStik : CGFloat!
     
     let firstStonePosition : CGFloat = 100
     
@@ -34,41 +36,51 @@ class MainScene: CCNode {
         gamePhysicsNode.debugDraw = true
         
         userInteractionEnabled = true
-        
-        let launchDirection = CGPoint(x: 1, y: 0)
-        let force = ccpMult(launchDirection, 49999)
-        
-        stik.physicsBody.applyForce(force)
-        
-        for i in 0...2 {
-            spawnNewStone()
-        }
+
     }
     
     override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
         
         let launchDirection = CGPoint(x: 1, y: 0)
-        
+        var screenHalf = CCDirector.sharedDirector().viewSize().width / 2
         let touchLocation = touch.locationInWorld()
-        
         var xTouch = touch.locationInWorld().x
         var yTouch = touch.locationInWorld().y
         
-        var screenHalf = CCDirector.sharedDirector().viewSize().width / 2
-        var xForce = pow(yTouch / 3, 2)     //later do something with trig and/or have an algorithm
-    
-        // tap sides
-        if xTouch < screenHalf {
-            stik.physicsBody.applyImpulse(ccpMult(launchDirection, xForce))  //left side
+        if yTouch <= yStik {
+            if gameState == .Ready {
+                
+                gameState = .Playing
+                
+                for i in 0...2 {
+                    spawnNewStone()
+                }
+                
+                tapLeft.runAction(CCActionFadeOut(duration: 0.3))
+                tapRight.runAction(CCActionFadeOut(duration: 0.3))
+                
+            }
+        }
+        
+        if gameState == .Playing {
             
-            tapLeft.position = touchLocation
-            tapLeft.visible = true
-            tapLeft.runAction(CCActionFadeOut(duration: 0.3))
-        } else {
-            stik.physicsBody.applyImpulse(ccpMult(launchDirection, -(xForce)))  //right side
+            var xForce = pow(yTouch / 3, 2)     //later do something with trig and/or have an algorithm
             
-            tapRight.position = touchLocation
-            tapRight.runAction(CCActionFadeOut(duration: 0.3))
+            // tap sides
+            if xTouch < screenHalf && yTouch <= yStik {
+                stik.physicsBody.applyImpulse(ccpMult(launchDirection, xForce))  //left side
+                
+                tapLeft.position = touchLocation
+                tapLeft.visible = true
+                tapLeft.runAction(CCActionFadeOut(duration: 0.3))
+            } else if xTouch > screenHalf && yTouch <= yStik {
+                stik.physicsBody.applyImpulse(ccpMult(launchDirection, -(xForce)))  //right side
+                
+                tapRight.position = touchLocation
+                tapRight.visible = true
+                tapRight.runAction(CCActionFadeOut(duration: 0.3))
+            }
+
         }
         
         if gameState == .GameOver { return }
@@ -85,12 +97,15 @@ class MainScene: CCNode {
         stone.position = ccp(screenWidth * rand, CGFloat(screenHeight + stone.contentSize.height))
         gamePhysicsNode.addChild(stone)
         stones.append(stone)
+        
+        let impulse = -18000.0
+        stone.physicsBody.applyAngularImpulse(CGFloat(impulse))
 
     }
     
     override func update(delta: CCTime) {
         
-        if gameState != .GameOver {
+        if gameState == .Playing {
             
             //scoring
             score += Float(delta)
@@ -113,7 +128,7 @@ class MainScene: CCNode {
         
         let screenBottom = CCDirector.sharedDirector().viewSize().height / 5
         
-        var yStik = stik.position.y
+        yStik = stik.position.y
         
         // game over
         if yStik < screenBottom {

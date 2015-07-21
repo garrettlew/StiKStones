@@ -35,6 +35,11 @@
 	<false/>
 	<key>nodeGraph</key>
 	<dict>
+		<key>animatedProperties</key>
+		<dict>
+			<key>0</key>
+			<dict/>
+		</dict>
 		<key>baseClass</key>
 		<string>CCSprite</string>
 		<key>children</key>
@@ -174,6 +179,8 @@
 			</dict>
 		</array>
 		<key>selected</key>
+		<true/>
+		<key>seqExpanded</key>
 		<true/>
 	</dict>
 	<key>notes</key>
