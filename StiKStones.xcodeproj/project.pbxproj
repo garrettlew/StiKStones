@@ -93,6 +93,7 @@
 		BC5399DA1A44DCC90063F482 /* GLActivityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5399D51A44DCC90063F482 /* GLActivityKit.framework */; };
 		BC5399DB1A44DCC90063F482 /* JavaFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5399D61A44DCC90063F482 /* JavaFoundation.framework */; };
 		BC5399DC1A44DCC90063F482 /* JavaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5399D71A44DCC90063F482 /* JavaKit.framework */; };
+		F61617851B618165000DEA26 /* TapIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61617841B618165000DEA26 /* TapIcons.swift */; };
 		F6D7DFB31B56CB1700E9A891 /* Stones.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D7DFB21B56CB1700E9A891 /* Stones.swift */; };
 /* End PBXBuildFile section */
 
@@ -212,6 +213,7 @@
 		BC5399D61A44DCC90063F482 /* JavaFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaFoundation.framework; path = "../../../../Library/Application Support/Developer/Shared/Xcode/Platforms/Android.platform/Developer/SDKs/SBAndroid.sdk/System/Library/Frameworks/JavaFoundation.framework"; sourceTree = "<group>"; };
 		BC5399D71A44DCC90063F482 /* JavaKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaKit.framework; path = "../../../../Library/Application Support/Developer/Shared/Xcode/Platforms/Android.platform/Developer/SDKs/SBAndroid.sdk/System/Library/Frameworks/JavaKit.framework"; sourceTree = "<group>"; };
 		D352B48019EC608A00829775 /* MetalShaders */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MetalShaders; path = Source/MetalShaders; sourceTree = "<group>"; };
+		F61617841B618165000DEA26 /* TapIcons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapIcons.swift; sourceTree = "<group>"; };
 		F6D7DFB21B56CB1700E9A891 /* Stones.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stones.swift; path = StiKStones.xcodeproj/../Source/Stones.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -438,6 +440,7 @@
 			children = (
 				7A40362019DDEF0D007B6E8F /* Platforms */,
 				7A046D7519E84C36004C4763 /* MainScene.swift */,
+				F61617841B618165000DEA26 /* TapIcons.swift */,
 				F6D7DFB21B56CB1700E9A891 /* Stones.swift */,
 				D352B48019EC608A00829775 /* MetalShaders */,
 			);
@@ -817,6 +820,7 @@
 			files = (
 				B73789871807631A0076A88C /* main.m in Sources */,
 				7A046D7919E84ED5004C4763 /* MainScene.swift in Sources */,
+				F61617851B618165000DEA26 /* TapIcons.swift in Sources */,
 				5B121038197487F2004C1E1D /* AppDelegate.m in Sources */,
 				F6D7DFB31B56CB1700E9A891 /* Stones.swift in Sources */,
 			);

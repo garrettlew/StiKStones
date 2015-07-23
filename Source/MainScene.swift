@@ -68,15 +68,15 @@ class MainScene: CCNode {
                     spawnNewStone()
                 }
                 
-                tapLeft.runAction(CCActionFadeOut(duration: 0.3))
-                tapRight.runAction(CCActionFadeOut(duration: 0.3))
+                NSNotificationCenter.defaultCenter().postNotificationName("gameStarted", object: nil)
                 
             }
         }
         
         if gameState == .Playing {
             
-            var xForce = pow((yTouch + 3) / 3, 2)     //later do something with trig; tapping low too little force
+            var xForce = CGFloat(1700)     //later do something with trig; tapping low too little force
+            //pow((yTouch + 3) / 3, 2)
             
             // tap sides
             if xTouch < screenHalf && yTouch <= yStik {
