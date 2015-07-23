@@ -20,6 +20,12 @@ class MainScene: CCNode {
     
     weak var scoreLabel: CCLabelTTF!
     var score : Float = 0
+    var highScore: Int = NSUserDefaults.standardUserDefaults().integerForKey("myHighScore") ?? 0 {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setInteger(highScore, forKey:"myHighScore")
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+    }
     
     var pivotJoint: CCPhysicsJoint?
     
@@ -27,15 +33,20 @@ class MainScene: CCNode {
     
     var stones : [CCNode] = []
     
-    var yStik : CGFloat!
+    var yStik : CGFloat!   //StiK y pos
+    var yBlock : CGFloat! //square block y pos
     
     let firstStonePosition : CGFloat = 100
     
     func didLoadFromCCB() {
         
-        gamePhysicsNode.debugDraw = true
+        //gamePhysicsNode.debugDraw = true
         
         userInteractionEnabled = true
+        
+        yBlock = squareblock.position.y
+        
+        //gamePhysicsNode.gravity = CGPoint(x: 0, y: -300)
 
     }
     
@@ -47,7 +58,8 @@ class MainScene: CCNode {
         var xTouch = touch.locationInWorld().x
         var yTouch = touch.locationInWorld().y
         
-        if yTouch <= yStik {
+        // so sly dogs cant start the game by tapping above or below the stiK
+        if yTouch <= yStik && yTouch >= yBlock && stik.visible {
             if gameState == .Ready {
                 
                 gameState = .Playing
@@ -64,7 +76,7 @@ class MainScene: CCNode {
         
         if gameState == .Playing {
             
-            var xForce = pow(yTouch / 3, 2)     //later do something with trig and/or have an algorithm
+            var xForce = pow((yTouch + 3) / 3, 2)     //later do something with trig; tapping low too little force
             
             // tap sides
             if xTouch < screenHalf && yTouch <= yStik {
@@ -91,15 +103,24 @@ class MainScene: CCNode {
         
         // create and add a new obstacle
         var rand = CGFloat (CCRANDOM_0_1())
-        let stone = CCBReader.load("Stones")
+        let stone = CCBReader.load("Stones") as! Stones
         let screenHeight = CCDirector.sharedDirector().viewSize().height
         let screenWidth = CCDirector.sharedDirector().viewSize().width
         stone.position = ccp(screenWidth * rand, CGFloat(screenHeight + stone.contentSize.height))
         gamePhysicsNode.addChild(stone)
         stones.append(stone)
         
-        let impulse = -18000.0
+        //rotate stone
+        var rotationSpeed = CGFloat(CCRANDOM_0_1() * 3)
+        var rotationDirection: CGFloat = 1
+        
+        if rand > 0.5 {
+            rotationDirection = -1
+        }
+        
+        var impulse = CGFloat(10000.0) * rotationDirection * rotationSpeed
         stone.physicsBody.applyAngularImpulse(CGFloat(impulse))
+        stone.animationManager.runAnimationsForSequenceNamed("StoneAnimation")
 
     }
     
@@ -126,7 +147,7 @@ class MainScene: CCNode {
             }
         }
         
-        let screenBottom = CCDirector.sharedDirector().viewSize().height / 5
+        let screenBottom = yBlock
         
         yStik = stik.position.y
         

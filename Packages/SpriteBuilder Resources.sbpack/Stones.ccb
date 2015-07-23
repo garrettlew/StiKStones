@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>1</integer>
+	<integer>6</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -38,7 +38,90 @@
 		<key>animatedProperties</key>
 		<dict>
 			<key>0</key>
-			<dict/>
+			<dict>
+				<key>spriteFrame</key>
+				<dict>
+					<key>keyframes</key>
+					<array>
+						<dict>
+							<key>easing</key>
+							<dict>
+								<key>type</key>
+								<integer>0</integer>
+							</dict>
+							<key>name</key>
+							<string>spriteFrame</string>
+							<key>time</key>
+							<real>0.0</real>
+							<key>type</key>
+							<integer>7</integer>
+							<key>value</key>
+							<array>
+								<string>assets/Stone Sprite Sheet/stone1.png</string>
+								<string>Use regular file</string>
+							</array>
+						</dict>
+						<dict>
+							<key>easing</key>
+							<dict>
+								<key>type</key>
+								<integer>0</integer>
+							</dict>
+							<key>name</key>
+							<string>spriteFrame</string>
+							<key>time</key>
+							<real>0.1666666716337204</real>
+							<key>type</key>
+							<integer>7</integer>
+							<key>value</key>
+							<array>
+								<string>assets/Stone Sprite Sheet/stone2.png</string>
+								<string>Use regular file</string>
+							</array>
+						</dict>
+						<dict>
+							<key>easing</key>
+							<dict>
+								<key>type</key>
+								<integer>0</integer>
+							</dict>
+							<key>name</key>
+							<string>spriteFrame</string>
+							<key>time</key>
+							<real>0.3333333432674408</real>
+							<key>type</key>
+							<integer>7</integer>
+							<key>value</key>
+							<array>
+								<string>assets/Stone Sprite Sheet/stone3.png</string>
+								<string>Use regular file</string>
+							</array>
+						</dict>
+						<dict>
+							<key>easing</key>
+							<dict>
+								<key>type</key>
+								<integer>0</integer>
+							</dict>
+							<key>name</key>
+							<string>spriteFrame</string>
+							<key>time</key>
+							<real>0.5</real>
+							<key>type</key>
+							<integer>7</integer>
+							<key>value</key>
+							<array>
+								<string>assets/Stone Sprite Sheet/stone4.png</string>
+								<string>Use regular file</string>
+							</array>
+						</dict>
+					</array>
+					<key>name</key>
+					<string>spriteFrame</string>
+					<key>type</key>
+					<integer>7</integer>
+				</dict>
+			</dict>
 		</dict>
 		<key>baseClass</key>
 		<string>CCSprite</string>
@@ -135,6 +218,11 @@
 				</array>
 			</dict>
 			<dict>
+				<key>baseValue</key>
+				<array>
+					<string>assets/Stone Sprite Sheet/stone1.png</string>
+					<string>Use regular file</string>
+				</array>
 				<key>name</key>
 				<string>spriteFrame</string>
 				<key>type</key>
@@ -142,7 +230,7 @@
 				<key>value</key>
 				<array>
 					<string></string>
-					<string>assets/seal.png</string>
+					<string>assets/Stone Sprite Sheet/stone1.png</string>
 				</array>
 			</dict>
 			<dict>
@@ -220,6 +308,42 @@
 	<array>
 		<dict>
 			<key>autoPlay</key>
+			<false/>
+			<key>callbackChannel</key>
+			<dict>
+				<key>keyframes</key>
+				<array/>
+				<key>type</key>
+				<integer>12</integer>
+			</dict>
+			<key>chainedSequenceId</key>
+			<integer>0</integer>
+			<key>length</key>
+			<real>0.5</real>
+			<key>name</key>
+			<string>StoneAnimation</string>
+			<key>offset</key>
+			<real>0.0</real>
+			<key>position</key>
+			<real>0.5</real>
+			<key>resolution</key>
+			<real>30</real>
+			<key>scale</key>
+			<real>512</real>
+			<key>sequenceId</key>
+			<integer>0</integer>
+			<key>soundChannel</key>
+			<dict>
+				<key>isExpanded</key>
+				<false/>
+				<key>keyframes</key>
+				<array/>
+				<key>type</key>
+				<integer>11</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>autoPlay</key>
 			<true/>
 			<key>callbackChannel</key>
 			<dict>
@@ -243,7 +367,7 @@
 			<key>scale</key>
 			<real>128</real>
 			<key>sequenceId</key>
-			<integer>0</integer>
+			<integer>1</integer>
 			<key>soundChannel</key>
 			<dict>
 				<key>isExpanded</key>
