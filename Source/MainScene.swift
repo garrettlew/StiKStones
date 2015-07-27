@@ -76,8 +76,8 @@ class MainScene: CCNode {
         
         if gameState == .Playing {
             
-            var xForce = CGFloat(1675)     //later do something with trig; tapping low too little force //Mark:
-            //1600
+            // MARK: Force
+            var xForce = CGFloat(1666)     //later do something with trig; tapping low too little force
             //yTouch * 10
             
             // tap sides; can only tap between current y pos of stik and y pos of block
