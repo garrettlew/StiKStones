@@ -20,6 +20,8 @@ class MainScene: CCNode {
     
     weak var scoreLabel: CCLabelTTF!
     var score : Float = 0
+    
+    weak var highScoreLabel: CCLabelTTF!
     var highScore: Int = NSUserDefaults.standardUserDefaults().integerForKey("myHighScore") ?? 0 {
         didSet {
             NSUserDefaults.standardUserDefaults().setInteger(highScore, forKey:"myHighScore")
@@ -33,10 +35,13 @@ class MainScene: CCNode {
     
     var stones : [CCNode] = []
     
+    var canSpawnNewStones: Bool = true
+    
     var yStik : CGFloat!   //StiK y pos
     var yBlock : CGFloat! //square block y pos
     
     let firstStonePosition : CGFloat = 100
+    
     
     func didLoadFromCCB() {
         
@@ -46,7 +51,7 @@ class MainScene: CCNode {
         
         yBlock = squareblock.position.y
         
-        //gamePhysicsNode.gravity = CGPoint(x: 0, y: -300)
+        highScoreLabel.string = String(Int(highScore))
 
     }
     
@@ -58,15 +63,11 @@ class MainScene: CCNode {
         var xTouch = touch.locationInWorld().x
         var yTouch = touch.locationInWorld().y
         
-        // so sly dogs cant start the game by tapping above or below the stiK
-        if yTouch <= yStik && yTouch >= yBlock && stik.visible {
+        // so sly dogs cant start the game before the carrot drops or by tapping above the stik
+        if yTouch <= yStik && stik.visible {
             if gameState == .Ready {
                 
                 gameState = .Playing
-                
-                for i in 0...2 {
-                    spawnNewStone()
-                }
                 
                 NSNotificationCenter.defaultCenter().postNotificationName("gameStarted", object: nil)
                 
@@ -75,17 +76,18 @@ class MainScene: CCNode {
         
         if gameState == .Playing {
             
-            var xForce = CGFloat(1700)     //later do something with trig; tapping low too little force
-            //pow((yTouch + 3) / 3, 2)
+            var xForce = CGFloat(1675)     //later do something with trig; tapping low too little force //Mark:
+            //1600
+            //yTouch * 10
             
-            // tap sides
-            if xTouch < screenHalf && yTouch <= yStik {
+            // tap sides; can only tap between current y pos of stik and y pos of block
+            if xTouch < screenHalf && yTouch <= yStik && yTouch >= yBlock {
                 stik.physicsBody.applyImpulse(ccpMult(launchDirection, xForce))  //left side
                 
                 tapLeft.position = touchLocation
                 tapLeft.visible = true
                 tapLeft.runAction(CCActionFadeOut(duration: 0.3))
-            } else if xTouch > screenHalf && yTouch <= yStik {
+            } else if xTouch > screenHalf && yTouch <= yStik && yTouch >= yBlock{
                 stik.physicsBody.applyImpulse(ccpMult(launchDirection, -(xForce)))  //right side
                 
                 tapRight.position = touchLocation
@@ -131,6 +133,15 @@ class MainScene: CCNode {
             //scoring
             score += Float(delta)
             scoreLabel.string = String(Int(score))
+            
+            if Int(score) == 5 && canSpawnNewStones {
+                
+                canSpawnNewStones = false
+                
+                for i in 0...2 {
+                    spawnNewStone()
+                }
+            }
 
             for stone in stones.reverse() {
                 let stoneWorldPosition = gamePhysicsNode.convertToWorldSpace(stone.position)
@@ -157,15 +168,24 @@ class MainScene: CCNode {
             
             joint.first?.invalidate()
             
-            triggerGameOver()
+            GameOver()
         }
         
         if gameState != .Playing { return }
     }
     
-    func triggerGameOver() {
+    func GameOver() {
         
-        restartButton.visible = true
+        //restartButton.visible = true
+        
+        if highScore < Int(score) {
+            highScore = Int(score)
+            
+        }
+        
+        println(highScore)
+        
+        restart()
         
         return gameState = .GameOver
     }

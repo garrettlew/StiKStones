@@ -82,7 +82,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>-60</real>
+										<real>-65</real>
 										<real>0.0</real>
 									</array>
 								</dict>
@@ -189,7 +189,7 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>-80</real>
+							<real>-65</real>
 							<real>0.0</real>
 							<integer>0</integer>
 							<integer>0</integer>
@@ -274,8 +274,6 @@
 						<array/>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -322,7 +320,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>60</real>
+										<real>65</real>
 										<real>0.0</real>
 									</array>
 								</dict>
@@ -429,7 +427,7 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>80</real>
+							<real>65</real>
 							<real>0.0</real>
 							<integer>0</integer>
 							<integer>0</integer>
@@ -514,6 +512,8 @@
 						<array/>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -645,7 +645,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>0.5</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -696,9 +696,9 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.034377098083496094</real>
+			<real>0.0</real>
 			<key>position</key>
-			<real>1</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
