@@ -817,7 +817,7 @@
 									<key>value</key>
 									<array>
 										<real>-0.5</real>
-										<real>130</real>
+										<real>0.22887323796749115</real>
 									</array>
 								</dict>
 								<dict>
@@ -835,7 +835,7 @@
 									<key>value</key>
 									<array>
 										<real>0.5</real>
-										<real>145</real>
+										<real>0.20000000298023224</real>
 									</array>
 								</dict>
 							</array>
@@ -1288,7 +1288,7 @@
 						<key>baseValue</key>
 						<array>
 							<real>0.5</real>
-							<real>130</real>
+							<real>0.22887323796749115</real>
 						</array>
 						<key>name</key>
 						<string>position</string>
@@ -1297,10 +1297,10 @@
 						<key>value</key>
 						<array>
 							<real>0.5</real>
-							<real>145</real>
+							<real>0.20000000298023224</real>
 							<integer>1</integer>
 							<integer>2</integer>
-							<integer>0</integer>
+							<integer>2</integer>
 						</array>
 					</dict>
 					<dict>
@@ -1375,10 +1375,10 @@
 						<key>value</key>
 						<array>
 							<real>0.5</real>
-							<real>478.87832641601562</real>
+							<real>0.87000000476837158</real>
 							<integer>0</integer>
 							<integer>2</integer>
-							<integer>0</integer>
+							<integer>2</integer>
 						</array>
 					</dict>
 					<dict>
@@ -1548,6 +1548,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -2799,8 +2801,6 @@
 						<array/>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>

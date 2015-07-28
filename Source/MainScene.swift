@@ -35,12 +35,14 @@ class MainScene: CCNode {
     
     var stones : [CCNode] = []
     
-    var canSpawnNewStones: Bool = true
+    var startingStones: Bool = true
     
     var yStik : CGFloat!   //StiK y pos
     var yBlock : CGFloat! //square block y pos
     
     let firstStonePosition : CGFloat = 100
+    
+    var anotherWaveTimer: Float = 0
     
     
     func didLoadFromCCB() {
@@ -63,8 +65,8 @@ class MainScene: CCNode {
         var xTouch = touch.locationInWorld().x
         var yTouch = touch.locationInWorld().y
         
-        // so sly dogs cant start the game before the carrot drops or by tapping above the stik
-        if yTouch <= yStik && stik.visible {
+        // so sly dogs cant start the game before the carrot drops or by tapping above or below the stik
+        if yTouch <= yStik && stik.visible && yTouch >= yBlock {
             if gameState == .Ready {
                 
                 gameState = .Playing
@@ -77,7 +79,7 @@ class MainScene: CCNode {
         if gameState == .Playing {
             
             // MARK: Force
-            var xForce = CGFloat(1666)     //later do something with trig; tapping low too little force
+            var xForce = CGFloat(1650)     //later do something with trig; tapping low too little force
             //yTouch * 10
             
             // tap sides; can only tap between current y pos of stik and y pos of block
@@ -134,15 +136,32 @@ class MainScene: CCNode {
             score += Float(delta)
             scoreLabel.string = String(Int(score))
             
-            if Int(score) == 5 && canSpawnNewStones {
+            if Int(score) == 5 && startingStones {
                 
-                canSpawnNewStones = false
+                startingStones = false
                 
                 for i in 0...2 {
                     spawnNewStone()
                 }
+                
+            }
+            
+            if !startingStones {
+                anotherWaveTimer += Float(delta)
+            }
+            
+            if anotherWaveTimer >= 2 {
+                
+                for i in 0...2 {
+                    spawnNewStone()
+                }
+                
+                anotherWaveTimer = 0
             }
 
+            // "%" means modular, Divide by a number and check remainder
+            
+            //removes Stones when reach bottom of screen
             for stone in stones.reverse() {
                 let stoneWorldPosition = gamePhysicsNode.convertToWorldSpace(stone.position)
                 let stoneScreenPosition = convertToNodeSpace(stoneWorldPosition)
@@ -151,9 +170,6 @@ class MainScene: CCNode {
                 if stoneScreenPosition.y < (-stone.contentSize.height) {
                     stone.removeFromParent()
                     stones.removeAtIndex(find(stones, stone)!)
-                    
-                    // for each removed obstacle, add a new one
-                    spawnNewStone()
                 }
             }
         }
