@@ -4,6 +4,10 @@ enum GameState {
     case Ready, Playing, GameOver
 }
 
+enum GameLevel {
+    case Begin, Early, EarlyMid, Mid, LateMid, Late, VeryLate, AlmostGod, God
+}
+
 class MainScene: CCNode {
     
     weak var stik: CCSprite!
@@ -14,9 +18,14 @@ class MainScene: CCNode {
     
     weak var tapLeft: CCSprite!
     
+    weak var gamePhysicsNode: CCPhysicsNode!
+    
+    var pivotJoint: CCPhysicsJoint?
+    
     weak var restartButton: CCButton!
     
-    weak var gamePhysicsNode: CCPhysicsNode!
+    weak var instruction1: CCLabelTTF!
+    weak var instruction2: CCLabelTTF!
     
     weak var scoreLabel: CCLabelTTF!
     var score : Float = 0
@@ -29,21 +38,22 @@ class MainScene: CCNode {
         }
     }
     
-    var pivotJoint: CCPhysicsJoint?
-    
     var gameState: GameState = .Ready
-    
-    var stones : [CCNode] = []
-    
-    var startingStones: Bool = true
+    var gameLevel: GameLevel = .Begin
     
     var yStik : CGFloat!   //StiK y pos
+    var xStik : CGFloat!    // StiK x pos
     var yBlock : CGFloat! //square block y pos
     
+    let screenHalf = CCDirector.sharedDirector().viewSize().width / 2
+
+    var stones : [CCNode] = []
+    
     let firstStonePosition : CGFloat = 100
+    var lastStikPosition : CGPoint = CGPoint(x: 0 , y: 0)
     
     var anotherWaveTimer: Float = 0
-    
+    var waveRate: Float = 3.0
     
     func didLoadFromCCB() {
         
@@ -54,19 +64,21 @@ class MainScene: CCNode {
         yBlock = squareblock.position.y
         
         highScoreLabel.string = String(Int(highScore))
+        
+        highScore = 0
 
     }
     
     override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
         
         let launchDirection = CGPoint(x: 1, y: 0)
-        var screenHalf = CCDirector.sharedDirector().viewSize().width / 2
+        let screenHeight = CCDirector.sharedDirector().viewSize().height
         let touchLocation = touch.locationInWorld()
         var xTouch = touch.locationInWorld().x
         var yTouch = touch.locationInWorld().y
         
-        // so sly dogs cant start the game before the carrot drops or by tapping above or below the stik
-        if yTouch <= yStik && stik.visible && yTouch >= yBlock {
+        // game can only start once initial animations finish
+        if stik.visible {
             if gameState == .Ready {
                 
                 gameState = .Playing
@@ -76,27 +88,37 @@ class MainScene: CCNode {
             }
         }
         
+        // MARK: Controls
         if gameState == .Playing {
             
-            // MARK: Force
             var xForce = CGFloat(1650)     //later do something with trig; tapping low too little force
             //yTouch * 10
             
             // tap sides; can only tap between current y pos of stik and y pos of block
-            if xTouch < screenHalf && yTouch <= yStik && yTouch >= yBlock {
+            if xTouch < screenHalf {
                 stik.physicsBody.applyImpulse(ccpMult(launchDirection, xForce))  //left side
                 
                 tapLeft.position = touchLocation
                 tapLeft.visible = true
                 tapLeft.runAction(CCActionFadeOut(duration: 0.3))
-            } else if xTouch > screenHalf && yTouch <= yStik && yTouch >= yBlock{
+                
+                // Steriods, So ppl have a chance to bring the stick up wen its low
+                if yStik < 2 * screenHeight/5 {
+                    stik.physicsBody.applyImpulse(ccpMult(launchDirection, 3300))
+                }
+                
+            } else {
                 stik.physicsBody.applyImpulse(ccpMult(launchDirection, -(xForce)))  //right side
                 
                 tapRight.position = touchLocation
                 tapRight.visible = true
                 tapRight.runAction(CCActionFadeOut(duration: 0.3))
+                
+                // Steriods, So ppl have a chance to bring the stick up wen its low
+                if yStik < 2 * screenHeight/5 {
+                    stik.physicsBody.applyImpulse(ccpMult(launchDirection, -(3300)))
+                }
             }
-
         }
         
         if gameState == .GameOver { return }
@@ -132,25 +154,93 @@ class MainScene: CCNode {
         
         if gameState == .Playing {
             
+            xStik = stik.position.x
+            
+            let pushDirection = CGPoint(x: 1, y: 0)
+            
+            // so sly dogs can't find equilibrium
+            if abs(stik.physicsBody.angularVelocity) < 0.1 {
+                if stik.position ==  lastStikPosition {
+
+                    if xStik < screenHalf {
+                        stik.physicsBody.applyForce(ccpMult(pushDirection, -100))
+                    } else {
+                        stik.physicsBody.applyForce(ccpMult(pushDirection, 100))
+                    }
+                }
+            }
+            lastStikPosition = stik.position
             //scoring
             score += Float(delta)
             scoreLabel.string = String(Int(score))
             
-            if Int(score) == 5 && startingStones {
-                
-                startingStones = false
+            // MARK: difficultyScaling
+            if gameLevel == .Begin && Int(score) == 6 {
+  
+                //fade out the instruction box
+                instruction1.runAction(CCActionFadeOut(duration: 0.5))
+                instruction2.runAction(CCActionFadeOut(duration: 0.5))
                 
                 for i in 0...2 {
                     spawnNewStone()
                 }
                 
+                gameLevel = .Early
+
             }
-            
-            if !startingStones {
+            if gameLevel != .Begin {
                 anotherWaveTimer += Float(delta)
             }
-            
-            if anotherWaveTimer >= 2 {
+            if gameLevel == .Early {
+                waveRate = 3
+                
+                if Int(score) == 18 {
+                    gameLevel = .EarlyMid
+                }
+            }
+            if gameLevel == .EarlyMid {
+                waveRate = 2.5
+                
+                if Int(score) ==  23{
+                    gameLevel = .Mid
+                }
+            }
+            if gameLevel == .Mid {
+                waveRate = 2
+                
+                if Int(score) == 28 {
+                    gameLevel = .LateMid
+                }
+            }
+            if gameLevel == .LateMid {
+                waveRate = 1.7
+                
+                if Int(score) == 40 {
+                    gameLevel = .Late
+                }
+            }
+            if gameLevel == .Late {
+                waveRate = 1.5
+                if Int(score) ==  50 {
+                    gameLevel = .VeryLate
+                }
+            }
+            if gameLevel == .VeryLate {
+                waveRate = 1.2
+                if Int(score) == 56 {
+                    gameLevel = .AlmostGod
+                }
+            }
+            if gameLevel == .AlmostGod {
+                waveRate = 1
+                if Int(score) == 120 {
+                    gameLevel = .God
+                }
+            }
+            if gameLevel == .God {
+                waveRate = 0.3
+            }
+            if anotherWaveTimer >= waveRate {
                 
                 for i in 0...2 {
                     spawnNewStone()
@@ -166,7 +256,6 @@ class MainScene: CCNode {
                 let stoneWorldPosition = gamePhysicsNode.convertToWorldSpace(stone.position)
                 let stoneScreenPosition = convertToNodeSpace(stoneWorldPosition)
                 
-                // obstacle moved past left side of screen?
                 if stoneScreenPosition.y < (-stone.contentSize.height) {
                     stone.removeFromParent()
                     stones.removeAtIndex(find(stones, stone)!)
@@ -199,8 +288,6 @@ class MainScene: CCNode {
             
         }
         
-        println(highScore)
-        
         restart()
         
         return gameState = .GameOver
@@ -214,6 +301,7 @@ class MainScene: CCNode {
         var scene = CCScene()
         scene.addChild(mainScene)
         
+        //fades old game out
         var transition = CCTransition(fadeWithDuration: 0.3)
         
         CCDirector.sharedDirector().presentScene(scene, withTransition: transition)

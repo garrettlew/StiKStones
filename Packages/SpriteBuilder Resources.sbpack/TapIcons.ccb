@@ -214,8 +214,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>0.30000001192092896</real>
-							<real>0.30000001192092896</real>
+							<real>0.64999997615814209</real>
+							<real>0.64999997615814209</real>
 							<false/>
 							<integer>0</integer>
 						</array>
@@ -228,7 +228,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>assets/tap_right.png</string>
+							<string>assets/gloveLeft.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -452,8 +452,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>0.30000001192092896</real>
-							<real>0.30000001192092896</real>
+							<real>0.27000001072883606</real>
+							<real>0.27000001072883606</real>
 							<false/>
 							<integer>0</integer>
 						</array>
@@ -466,7 +466,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>assets/tap_left.png</string>
+							<string>assets/gloveRight.png</string>
 						</array>
 					</dict>
 					<dict>
