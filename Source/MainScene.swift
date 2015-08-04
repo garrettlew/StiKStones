@@ -8,7 +8,7 @@ enum GameLevel {
     case Begin, Early, EarlyMid, Mid, LateMid, Late, VeryLate, AlmostGod, God
 }
 
-class MainScene: CCNode {
+class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     weak var stik: CCSprite!
     
@@ -21,9 +21,7 @@ class MainScene: CCNode {
     weak var gamePhysicsNode: CCPhysicsNode!
     
     var pivotJoint: CCPhysicsJoint?
-    
-    weak var restartButton: CCButton!
-    
+
     weak var instruction1: CCLabelTTF!
     weak var instruction2: CCLabelTTF!
     
@@ -34,6 +32,14 @@ class MainScene: CCNode {
     var highScore: Int = NSUserDefaults.standardUserDefaults().integerForKey("myHighScore") ?? 0 {
         didSet {
             NSUserDefaults.standardUserDefaults().setInteger(highScore, forKey:"myHighScore")
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+    }
+    
+    weak var lastScoreLabel: CCLabelTTF!
+    var lastScore: Int = NSUserDefaults.standardUserDefaults().integerForKey("myLastScore") ?? 0 {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setInteger(lastScore, forKey:"myLastScore")
             NSUserDefaults.standardUserDefaults().synchronize()
         }
     }
@@ -49,24 +55,59 @@ class MainScene: CCNode {
 
     var stones : [CCNode] = []
     
-    let firstStonePosition : CGFloat = 100
+    var coins : [CCNode] = []
+    
+    let screenHeight = CCDirector.sharedDirector().viewSize().height
+    let screenWidth = CCDirector.sharedDirector().viewSize().width
+
     var lastStikPosition : CGPoint = CGPoint(x: 0 , y: 0)
+    
+    var gameTimer: Float = 0
     
     var anotherWaveTimer: Float = 0
     var waveRate: Float = 3.0
     
+    var anotherCoinTimer: Float = 0
+    
+    var instructionsVisible = true
+    
+    var didRestart = false
+    
+    var dropDownFinished = false
+    
     func didLoadFromCCB() {
         
         //gamePhysicsNode.debugDraw = true
+        
+        gamePhysicsNode.collisionDelegate = self
         
         userInteractionEnabled = true
         
         yBlock = squareblock.position.y
         
         highScoreLabel.string = String(Int(highScore))
-        
-        highScore = 0
 
+    }
+    
+    func dropDownLastScore() {
+        
+        if instructionsVisible {
+            instruction1.runAction(CCActionFadeOut(duration: 0.3))
+            instruction2.runAction(CCActionFadeOut(duration: 0.3))
+        }
+        
+        scoreLabel.runAction(CCActionFadeOut(duration: 0.3))
+        
+        // adds dropdown
+        var gameOverScreen = CCBReader.load("GameOver", owner: self) as! GameOver
+        gameOverScreen.lastScore = lastScore
+        gameOverScreen.highScore = highScore
+        self.addChild(gameOverScreen)
+
+    }
+    
+    func dropDownDone() {
+        dropDownFinished = true
     }
     
     override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
@@ -91,8 +132,7 @@ class MainScene: CCNode {
         // MARK: Controls
         if gameState == .Playing {
             
-            var xForce = CGFloat(1650)     //later do something with trig; tapping low too little force
-            //yTouch * 10
+            var xForce = CGFloat(1650)
             
             // tap sides; can only tap between current y pos of stik and y pos of block
             if xTouch < screenHalf {
@@ -121,8 +161,42 @@ class MainScene: CCNode {
             }
         }
         
-        if gameState == .GameOver { return }
+        if gameState == .GameOver && !didRestart && dropDownFinished {
+            didRestart = true
+            restart()
+        }
+    }
     
+    func ccPhysicsCollisionPostSolve(pair: CCPhysicsCollisionPair!, coin: Coins!, stik: CCSprite!) {
+        score += 3
+        coin.removeFromParent()
+        coins.removeAtIndex(find(coins, coin)!)
+    }
+    
+    func spawnNewCoin() {
+        
+        
+        // create and add a new coin
+        var rand = CGFloat (CCRANDOM_0_1())
+        let coin = CCBReader.load("Coins") as! Coins
+        coin.position = ccp(CGFloat(clampf(Float(screenWidth * rand), Float(screenWidth/4), Float(screenWidth - screenWidth/4))), CGFloat(screenHeight + coin.contentSize.height))
+        gamePhysicsNode.addChild(coin)
+        coins.append(coin)
+
+    }
+    
+    func removeCoin() {
+        
+        //removes Coins when reach bottom of screen
+        for coin in coins.reverse() {
+            let coinWorldPosition = gamePhysicsNode.convertToWorldSpace(coin.position)
+            let coinScreenPosition = convertToNodeSpace(coinWorldPosition)
+            
+            if coinScreenPosition.y < (-coin.contentSize.height) {
+                coin.removeFromParent()
+                coins.removeAtIndex(find(coins, coin)!)
+            }
+        }
     }
     
     func spawnNewStone() {
@@ -130,9 +204,7 @@ class MainScene: CCNode {
         // create and add a new obstacle
         var rand = CGFloat (CCRANDOM_0_1())
         let stone = CCBReader.load("Stones") as! Stones
-        let screenHeight = CCDirector.sharedDirector().viewSize().height
-        let screenWidth = CCDirector.sharedDirector().viewSize().width
-        stone.position = ccp(screenWidth * rand, CGFloat(screenHeight + stone.contentSize.height))
+        stone.position = ccp(CGFloat(clampf(Float(screenWidth * rand), Float(stone.boundingBox().width/2), Float(screenWidth - stone.boundingBox().width/2))), screenHeight + stone.boundingBox().height)
         gamePhysicsNode.addChild(stone)
         stones.append(stone)
         
@@ -150,6 +222,22 @@ class MainScene: CCNode {
 
     }
     
+    func removeStone() {
+        
+        //removes Stones when reach bottom of screen
+        for stone in stones.reverse() {
+            let stoneWorldPosition = gamePhysicsNode.convertToWorldSpace(stone.position)
+            let stoneScreenPosition = convertToNodeSpace(stoneWorldPosition)
+            
+            if stoneScreenPosition.y < (-stone.boundingBox().height) {
+                stone.removeFromParent()
+                stones.removeAtIndex(find(stones, stone)!)
+            }
+        }
+    }
+    
+    
+
     override func update(delta: CCTime) {
         
         if gameState == .Playing {
@@ -174,12 +262,16 @@ class MainScene: CCNode {
             score += Float(delta)
             scoreLabel.string = String(Int(score))
             
+            gameTimer += Float(delta)
+            
             // MARK: difficultyScaling
-            if gameLevel == .Begin && Int(score) == 6 {
+            if gameLevel == .Begin && Int(gameTimer) == 6 {
   
                 //fade out the instruction box
                 instruction1.runAction(CCActionFadeOut(duration: 0.5))
                 instruction2.runAction(CCActionFadeOut(duration: 0.5))
+                
+                instructionsVisible = false
                 
                 for i in 0...2 {
                     spawnNewStone()
@@ -190,54 +282,62 @@ class MainScene: CCNode {
             }
             if gameLevel != .Begin {
                 anotherWaveTimer += Float(delta)
+                anotherCoinTimer += Float(delta)
             }
             if gameLevel == .Early {
                 waveRate = 3
                 
-                if Int(score) == 18 {
+                if Int(gameTimer) == 18 {
+                    
                     gameLevel = .EarlyMid
                 }
             }
             if gameLevel == .EarlyMid {
                 waveRate = 2.5
                 
-                if Int(score) ==  23{
+                if Int(gameTimer) ==  23{
                     gameLevel = .Mid
                 }
             }
             if gameLevel == .Mid {
                 waveRate = 2
                 
-                if Int(score) == 28 {
+                if Int(gameTimer) == 29 {
+                    
                     gameLevel = .LateMid
                 }
             }
             if gameLevel == .LateMid {
                 waveRate = 1.7
                 
-                if Int(score) == 40 {
+                if Int(gameTimer) >= 40 {
+                    
                     gameLevel = .Late
                 }
             }
             if gameLevel == .Late {
                 waveRate = 1.5
-                if Int(score) ==  50 {
+                if Int(gameTimer) >=  50 {
+                    
                     gameLevel = .VeryLate
                 }
             }
             if gameLevel == .VeryLate {
                 waveRate = 1.2
-                if Int(score) == 56 {
+                if Int(gameTimer) == 56 {
+                    
                     gameLevel = .AlmostGod
                 }
             }
             if gameLevel == .AlmostGod {
+                
                 waveRate = 1
-                if Int(score) == 120 {
+                if Int(gameTimer) == 120 {
                     gameLevel = .God
                 }
             }
             if gameLevel == .God {
+
                 waveRate = 0.3
             }
             if anotherWaveTimer >= waveRate {
@@ -248,19 +348,16 @@ class MainScene: CCNode {
                 
                 anotherWaveTimer = 0
             }
-
-            // "%" means modular, Divide by a number and check remainder
             
-            //removes Stones when reach bottom of screen
-            for stone in stones.reverse() {
-                let stoneWorldPosition = gamePhysicsNode.convertToWorldSpace(stone.position)
-                let stoneScreenPosition = convertToNodeSpace(stoneWorldPosition)
-                
-                if stoneScreenPosition.y < (-stone.contentSize.height) {
-                    stone.removeFromParent()
-                    stones.removeAtIndex(find(stones, stone)!)
-                }
+            if anotherCoinTimer >= 5 {
+                spawnNewCoin()
+                anotherCoinTimer = 0
             }
+
+            removeStone()
+            
+            removeCoin()
+            
         }
         
         let screenBottom = yBlock
@@ -273,30 +370,34 @@ class MainScene: CCNode {
             
             joint.first?.invalidate()
             
-            GameOver()
+            if gameState != .GameOver {
+                triggerGameOver()
+            }
+            
         }
         
         if gameState != .Playing { return }
     }
     
-    func GameOver() {
+    func triggerGameOver() {
         
-        //restartButton.visible = true
+        gameState = .GameOver
+        
+        lastScore = Int(score)
         
         if highScore < Int(score) {
             highScore = Int(score)
             
         }
         
-        restart()
+        dropDownLastScore()
         
-        return gameState = .GameOver
+        //restart()
     }
     
     func restart() {
         
         var mainScene = CCBReader.load("MainScene") as! MainScene
-        //mainScene.ready()
         
         var scene = CCScene()
         scene.addChild(mainScene)
@@ -308,3 +409,5 @@ class MainScene: CCNode {
     }
 
 }
+
+// "%" means modular, Divide by a number and check remainder
