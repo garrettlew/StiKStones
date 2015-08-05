@@ -77,7 +77,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     func didLoadFromCCB() {
         
-        //gamePhysicsNode.debugDraw = true
+//        gamePhysicsNode.debugDraw = true
         
         gamePhysicsNode.collisionDelegate = self
         
@@ -88,7 +88,13 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         highScoreLabel.string = String(Int(highScore))
 
     }
-    
+    override func onEnter() {
+        squareblock.position.x = screenWidth / 2
+        squareblock.position.y = screenWidth * 0.1
+        stik.position.x = screenWidth / 2
+        stik.position.y = screenHeight * 0.53
+        super.onEnter()
+    }
     func dropDownLastScore() {
         
         if instructionsVisible {
@@ -167,8 +173,28 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         }
     }
     
+    func pulseScore() {
+        let squish = CCActionScaleTo(duration: 0.2, scaleX: 1.3, scaleY: 1.95)
+        let unsquish = CCActionScaleTo(duration: 0.1, scaleX: 1.0, scaleY: 1.5)
+
+      
+        let makeYellow = CCActionCallBlock(block: {
+            self.scoreLabel.fontColor = CCColor(red: 1.0, green: 0.9, blue: 0.1)
+        })
+        
+        let changeColorBack = CCActionCallBlock(block: {
+            self.scoreLabel.fontColor = CCColor(red: 1.0, green: 1.0, blue: 1.0)
+        })
+        
+        let seq = CCActionSequence(array: [makeYellow, squish, unsquish, changeColorBack])
+        
+        scoreLabel.runAction(seq)
+        
+    }
+    
     func ccPhysicsCollisionPostSolve(pair: CCPhysicsCollisionPair!, coin: Coins!, stik: CCSprite!) {
         score += 3
+        pulseScore()
         coin.removeFromParent()
         coins.removeAtIndex(find(coins, coin)!)
     }

@@ -1,0 +1,6 @@
+framework module Pods_StiKStones_iOS {
+  umbrella header "Pods-StiKStones iOS-umbrella.h"
+
+  export *
+  module * { export * }
+}
