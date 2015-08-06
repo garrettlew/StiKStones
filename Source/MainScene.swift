@@ -47,6 +47,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var gameState: GameState = .Ready
     var gameLevel: GameLevel = .Begin
     
+    var attributionScreen: Attributions!
+    var gameOverScreen: GameOver!
+    
     var yStik : CGFloat!   //StiK y pos
     var xStik : CGFloat!    // StiK x pos
     var yBlock : CGFloat! //square block y pos
@@ -70,6 +73,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var anotherCoinTimer: Float = 0
     
     var instructionsVisible = true
+    
+    var inAttributionScreen = false
     
     var didRestart = false
     
@@ -95,6 +100,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         stik.position.y = screenHeight * 0.53
         super.onEnter()
     }
+    
     func dropDownLastScore() {
         
         if instructionsVisible {
@@ -105,7 +111,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         scoreLabel.runAction(CCActionFadeOut(duration: 0.3))
         
         // adds dropdown
-        var gameOverScreen = CCBReader.load("GameOver", owner: self) as! GameOver
+        gameOverScreen = CCBReader.load("GameOver", owner: self) as! GameOver
         gameOverScreen.lastScore = lastScore
         gameOverScreen.highScore = highScore
         self.addChild(gameOverScreen)
@@ -167,19 +173,19 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
         }
         
-        if gameState == .GameOver && !didRestart && dropDownFinished {
+        if gameState == .GameOver && !didRestart && dropDownFinished && !inAttributionScreen {
             didRestart = true
             restart()
         }
     }
     
     func pulseScore() {
-        let squish = CCActionScaleTo(duration: 0.2, scaleX: 1.3, scaleY: 1.95)
+        let squish = CCActionScaleTo(duration: 0.2, scaleX: 1.2, scaleY: 1.8)
         let unsquish = CCActionScaleTo(duration: 0.1, scaleX: 1.0, scaleY: 1.5)
 
       
         let makeYellow = CCActionCallBlock(block: {
-            self.scoreLabel.fontColor = CCColor(red: 1.0, green: 0.9, blue: 0.1)
+            self.scoreLabel.fontColor = CCColor(red: 0.95, green: 0.9, blue: 0.15)
         })
         
         let changeColorBack = CCActionCallBlock(block: {
@@ -230,7 +236,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         // create and add a new obstacle
         var rand = CGFloat (CCRANDOM_0_1())
         let stone = CCBReader.load("Stones") as! Stones
-        stone.position = ccp(CGFloat(clampf(Float(screenWidth * rand), Float(stone.boundingBox().width/2), Float(screenWidth - stone.boundingBox().width/2))), screenHeight + stone.boundingBox().height)
+        stone.position = ccp(CGFloat(clampf(Float(screenWidth * rand), Float(stone.boundingBox().width), Float(screenWidth - stone.boundingBox().width))), screenHeight + stone.boundingBox().height)
         gamePhysicsNode.addChild(stone)
         stones.append(stone)
         
@@ -364,7 +370,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .God {
 
-                waveRate = 0.3
+                waveRate = 0.5
             }
             if anotherWaveTimer >= waveRate {
                 
@@ -419,6 +425,21 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         dropDownLastScore()
         
         //restart()
+    }
+    
+    func attributions() {
+        
+        attributionScreen = CCBReader.load("Attributions", owner: self) as! Attributions
+        self.addChild(attributionScreen)
+        self.gameOverScreen.visible = false
+        inAttributionScreen = true
+        
+    }
+    
+    func returnToGameOver() {
+        self.attributionScreen.removeFromParent()
+        self.gameOverScreen.visible = true
+        inAttributionScreen = false
     }
     
     func restart() {

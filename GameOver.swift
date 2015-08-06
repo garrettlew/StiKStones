@@ -9,6 +9,9 @@
 import Foundation
 
 class GameOver: CCNode {
+    
+    weak var infoButton: CCButton!
+
     weak var lastScoreLabel: CCLabelTTF!
     var lastScore: Int = 0 {
         didSet {

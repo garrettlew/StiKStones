@@ -98,6 +98,7 @@
 		F61617891B61AD77000DEA26 /* Stones.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61617881B61AD77000DEA26 /* Stones.swift */; };
 		F620B40F1B700B9E00581F88 /* Coins.swift in Sources */ = {isa = PBXBuildFile; fileRef = F620B40E1B700B9E00581F88 /* Coins.swift */; };
 		F66C7F241B6BF092009C818D /* GameOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66C7F231B6BF092009C818D /* GameOver.swift */; };
+		F6F8C09B1B73DE3A00B82B1B /* Attributions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F8C09A1B73DE3A00B82B1B /* Attributions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -223,6 +224,7 @@
 		F61617881B61AD77000DEA26 /* Stones.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stones.swift; sourceTree = "<group>"; };
 		F620B40E1B700B9E00581F88 /* Coins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coins.swift; sourceTree = "<group>"; };
 		F66C7F231B6BF092009C818D /* GameOver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOver.swift; sourceTree = "<group>"; };
+		F6F8C09A1B73DE3A00B82B1B /* Attributions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Attributions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -459,6 +461,7 @@
 				7A40362019DDEF0D007B6E8F /* Platforms */,
 				7A046D7519E84C36004C4763 /* MainScene.swift */,
 				F66C7F231B6BF092009C818D /* GameOver.swift */,
+				F6F8C09A1B73DE3A00B82B1B /* Attributions.swift */,
 				F61617841B618165000DEA26 /* TapIcons.swift */,
 				F61617881B61AD77000DEA26 /* Stones.swift */,
 				F620B40E1B700B9E00581F88 /* Coins.swift */,
@@ -894,6 +897,7 @@
 				F61617851B618165000DEA26 /* TapIcons.swift in Sources */,
 				F620B40F1B700B9E00581F88 /* Coins.swift in Sources */,
 				F66C7F241B6BF092009C818D /* GameOver.swift in Sources */,
+				F6F8C09B1B73DE3A00B82B1B /* Attributions.swift in Sources */,
 				5B121038197487F2004C1E1D /* AppDelegate.m in Sources */,
 				F61617891B61AD77000DEA26 /* Stones.swift in Sources */,
 			);
@@ -1177,6 +1181,8 @@
 			baseConfigurationReference = AD9E46B8FD470AE2B79BB6B9 /* Pods-StiKStones iOS.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1215,6 +1221,8 @@
 			baseConfigurationReference = DA86CB97CF18F3B8540F1949 /* Pods-StiKStones iOS.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
