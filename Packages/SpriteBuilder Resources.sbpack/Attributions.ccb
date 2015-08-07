@@ -1908,8 +1908,8 @@ Garrett Lew</string>
 										<string>Text</string>
 										<key>value</key>
 										<array>
-											<string>Icons8: Info Icon 
-https://icons8.com/
+											<string>Gold Coin Tutorial
+http://supercolortuts.com/
 
 © 2012-2013 Julien Jorge &lt;julien.jorge@stuff-o-matic.com&gt;
 http://creativecommons.org/licenses/by/3.0/
@@ -2051,6 +2051,8 @@ http://www.1001fonts.com/vipnagorgialla-font.html#license</string>
 										</array>
 									</dict>
 								</array>
+								<key>selected</key>
+								<true/>
 							</dict>
 						</array>
 						<key>customClass</key>
@@ -2456,8 +2458,6 @@ http://www.1001fonts.com/vipnagorgialla-font.html#license</string>
 								</array>
 							</dict>
 						</array>
-						<key>selected</key>
-						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
@@ -2702,7 +2702,7 @@ http://www.1001fonts.com/vipnagorgialla-font.html#license</string>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>29.624975204467773</real>
+			<real>29.634254455566406</real>
 			<key>position</key>
 			<real>30</real>
 			<key>resolution</key>

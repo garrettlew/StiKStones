@@ -1,5 +1,7 @@
 import Foundation
 
+import GameKit
+
 enum GameState {
     case Ready, Playing, GameOver
 }
@@ -80,7 +82,14 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     var dropDownFinished = false
     
+    func setUpGameCenter() {
+        let gameCenterInteractor = GameCenterInteractor.sharedInstance
+        gameCenterInteractor.authenticationCheck()
+    }
+    
     func didLoadFromCCB() {
+        
+        setUpGameCenter()
         
 //        gamePhysicsNode.debugDraw = true
         
@@ -93,6 +102,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         highScoreLabel.string = String(Int(highScore))
 
     }
+    
     override func onEnter() {
         squareblock.position.x = screenWidth / 2
         squareblock.position.y = screenWidth * 0.1

@@ -99,6 +99,8 @@
 		F620B40F1B700B9E00581F88 /* Coins.swift in Sources */ = {isa = PBXBuildFile; fileRef = F620B40E1B700B9E00581F88 /* Coins.swift */; };
 		F66C7F241B6BF092009C818D /* GameOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66C7F231B6BF092009C818D /* GameOver.swift */; };
 		F6F8C09B1B73DE3A00B82B1B /* Attributions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F8C09A1B73DE3A00B82B1B /* Attributions.swift */; };
+		F6F8C0CE1B752F9900B82B1B /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6F8C0CD1B752F9900B82B1B /* GameKit.framework */; };
+		F6F8C0D01B75314E00B82B1B /* GameCenterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F8C0CF1B75314E00B82B1B /* GameCenterInteractor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -225,6 +227,8 @@
 		F620B40E1B700B9E00581F88 /* Coins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coins.swift; sourceTree = "<group>"; };
 		F66C7F231B6BF092009C818D /* GameOver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOver.swift; sourceTree = "<group>"; };
 		F6F8C09A1B73DE3A00B82B1B /* Attributions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Attributions.swift; sourceTree = "<group>"; };
+		F6F8C0CD1B752F9900B82B1B /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		F6F8C0CF1B75314E00B82B1B /* GameCenterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCenterInteractor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +272,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6F8C0CE1B752F9900B82B1B /* GameKit.framework in Frameworks */,
 				7A97911819E631CD001FFC4D /* libcocos2d.a in Frameworks */,
 				8392007A18EE8E3300B6C429 /* GLKit.framework in Frameworks */,
 				B77F1B3217B978D7009739AE /* QuartzCore.framework in Frameworks */,
@@ -461,6 +466,7 @@
 				7A40362019DDEF0D007B6E8F /* Platforms */,
 				7A046D7519E84C36004C4763 /* MainScene.swift */,
 				F66C7F231B6BF092009C818D /* GameOver.swift */,
+				F6F8C0CF1B75314E00B82B1B /* GameCenterInteractor.swift */,
 				F6F8C09A1B73DE3A00B82B1B /* Attributions.swift */,
 				F61617841B618165000DEA26 /* TapIcons.swift */,
 				F61617881B61AD77000DEA26 /* Stones.swift */,
@@ -517,6 +523,7 @@
 		B77F1B3017B978D7009739AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F6F8C0CD1B752F9900B82B1B /* GameKit.framework */,
 				BC5399D31A44DCC90063F482 /* AndroidKit.framework */,
 				BC5399D41A44DCC90063F482 /* CoreJava.framework */,
 				BC5399D51A44DCC90063F482 /* GLActivityKit.framework */,
@@ -899,6 +906,7 @@
 				F66C7F241B6BF092009C818D /* GameOver.swift in Sources */,
 				F6F8C09B1B73DE3A00B82B1B /* Attributions.swift in Sources */,
 				5B121038197487F2004C1E1D /* AppDelegate.m in Sources */,
+				F6F8C0D01B75314E00B82B1B /* GameCenterInteractor.swift in Sources */,
 				F61617891B61AD77000DEA26 /* Stones.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
