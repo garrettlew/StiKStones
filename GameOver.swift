@@ -13,6 +13,7 @@ import GameKit
 class GameOver: CCNode {
     
     weak var infoButton: CCButton!
+    weak var leaderboardButton: CCButton!
 
     weak var lastScoreLabel: CCLabelTTF!
     var lastScore: Int = 0 {
@@ -26,6 +27,59 @@ class GameOver: CCNode {
         didSet {
             highScoreLabel.string = "\(highScore)"
         }
+    }
+    
+    override func  onEnter() {
+        checkForNewHighScores()
+        super.onEnter()
+    }
+    
+    func openGameCenter() {
+        showLeaderboard()
+    }
+    
+    func reportHighScoreToGameCenter(){
+        var scoreReporter = GKScore(leaderboardIdentifier: "StiKsandStonesLeaderboard")
+        scoreReporter.value = Int64(highScore)
+        var scoreArray: [GKScore] = [scoreReporter]
+        GKScore.reportScores(scoreArray, withCompletionHandler: {(error : NSError!) -> Void in
+            if error != nil {
+                println("Game Center: Score Submission Error")
+            }
+        })
+    }
+    
+    func checkForNewHighScores(){
+        if lastScore == highScore {
+            reportHighScoreToGameCenter()
+        }
+    }
+    
+    func shareButtonTapped() {
+        var scene = CCDirector.sharedDirector().runningScene
+        var node: AnyObject = scene.children[0]
+        var screenshot = screenShotWithStartNode(node as! CCNode)
+        
+        let sharedText = "Get Rekt."
+        let itemsToShare = [screenshot, sharedText]
+        
+        var excludedActivities = [ UIActivityTypeAssignToContact,
+            UIActivityTypeAddToReadingList, UIActivityTypePostToTencentWeibo]
+        
+        var controller = UIActivityViewController(activityItems: itemsToShare, applicationActivities: nil)
+        controller.excludedActivityTypes = excludedActivities
+        UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(controller, animated: true, completion: nil)
+        
+    }
+    
+    func screenShotWithStartNode(node: CCNode) -> UIImage {
+        CCDirector.sharedDirector().nextDeltaTimeZero = true
+        var viewSize = CCDirector.sharedDirector().viewSize()
+        var rtx = CCRenderTexture(width: Int32(viewSize.width), height: Int32(viewSize.height))
+        rtx.begin()
+        node.visit()
+        rtx.end()
+        return rtx.getUIImage()
     }
 }
 
@@ -44,3 +98,4 @@ extension GameOver: GKGameCenterControllerDelegate {
         gameCenterViewController.dismissViewControllerAnimated(true, completion: nil)
     }
 }
+
