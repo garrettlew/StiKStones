@@ -307,6 +307,11 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             gameTimer += Float(delta)
             
             // MARK: difficultyScaling
+            
+            if gameLevel == .Begin {
+                mixpanel.track("Level Complete", parameters: ["Level": "Begin"])
+            }
+            
             if gameLevel == .Begin && Int(gameTimer) == 6 {
   
                 //fade out the instruction box
@@ -328,6 +333,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .Early {
                 waveRate = 3
+                mixpanel.track("Level Complete", parameters: ["Level": "Early"])
                 
                 if Int(gameTimer) == 18 {
                     
@@ -336,6 +342,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .EarlyMid {
                 waveRate = 2.5
+                mixpanel.track("Level Complete", parameters: ["Level": "EarlyMid"])
                 
                 if Int(gameTimer) ==  23{
                     gameLevel = .Mid
@@ -343,6 +350,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .Mid {
                 waveRate = 2
+                mixpanel.track("Level Complete", parameters: ["Level": "Mid"])
                 
                 if Int(gameTimer) == 29 {
                     
@@ -351,6 +359,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .LateMid {
                 waveRate = 1.7
+                mixpanel.track("Level Complete", parameters: ["Level": "LateMid"])
                 
                 if Int(gameTimer) >= 40 {
                     
@@ -359,6 +368,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .Late {
                 waveRate = 1.5
+                mixpanel.track("Level Complete", parameters: ["Level": "Late"])
+                
                 if Int(gameTimer) >=  50 {
                     
                     gameLevel = .VeryLate
@@ -366,21 +377,25 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .VeryLate {
                 waveRate = 1.2
+                mixpanel.track("Level Complete", parameters: ["Level": "VeryLate"])
+                
                 if Int(gameTimer) == 56 {
                     
                     gameLevel = .AlmostGod
                 }
             }
             if gameLevel == .AlmostGod {
-                
                 waveRate = 1
+                mixpanel.track("Level Complete", parameters: ["Level": "AlmostGod"])
+                
                 if Int(gameTimer) == 120 {
                     gameLevel = .God
                 }
             }
             if gameLevel == .God {
-
                 waveRate = 0.5
+                mixpanel.track("Level Complete", parameters: ["Level": "God"])
+                
             }
             if anotherWaveTimer >= waveRate {
                 

@@ -35,6 +35,7 @@ class GameOver: CCNode {
     }
     
     func openGameCenter() {
+        mixpanel.track("Open Leaderboard", parameters: ["LeaderboardType": "Game Center"])
         showLeaderboard()
     }
     
@@ -56,11 +57,14 @@ class GameOver: CCNode {
     }
     
     func shareButtonTapped() {
+        
+        mixpanel.track("Share", parameters: ["ShareType": "Share Button"])
+        
         var scene = CCDirector.sharedDirector().runningScene
         var node: AnyObject = scene.children[0]
         var screenshot = screenShotWithStartNode(node as! CCNode)
         
-        let sharedText = "Get Rekt."
+        let sharedText = "I just Rekt you in StiKs and Stones."
         let itemsToShare = [screenshot, sharedText]
         
         var excludedActivities = [ UIActivityTypeAssignToContact,
