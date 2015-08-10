@@ -616,7 +616,7 @@
 										<key>value</key>
 										<array>
 											<string>Garrett Lew
-garrett.r.lew@gmail.com</string>
+stiks.stones@gmail.com</string>
 											<false/>
 										</array>
 									</dict>
@@ -752,6 +752,8 @@ garrett.r.lew@gmail.com</string>
 										</array>
 									</dict>
 								</array>
+								<key>selected</key>
+								<true/>
 							</dict>
 							<dict>
 								<key>UUID</key>
@@ -3130,7 +3132,7 @@ http://www.1001fonts.com/vipnagorgialla-font.html#license</string>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>29.634254455566406</real>
+			<real>29.562078475952148</real>
 			<key>position</key>
 			<real>30</real>
 			<key>resolution</key>

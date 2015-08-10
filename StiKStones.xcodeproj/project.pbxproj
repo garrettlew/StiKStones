@@ -60,7 +60,6 @@
 		F6F8C0CE1B752F9900B82B1B /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6F8C0CD1B752F9900B82B1B /* GameKit.framework */; };
 		F6F8C0D01B75314E00B82B1B /* GameCenterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F8C0CF1B75314E00B82B1B /* GameCenterInteractor.swift */; };
 		F6F8C0DA1B757BCA00B82B1B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6F8C0D91B757BCA00B82B1B /* Images.xcassets */; };
-		F6F8C0DC1B76A06C00B82B1B /* Mixpanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F8C0DB1B76A06C00B82B1B /* Mixpanel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -176,7 +175,6 @@
 		F6F8C0CD1B752F9900B82B1B /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F6F8C0CF1B75314E00B82B1B /* GameCenterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCenterInteractor.swift; sourceTree = "<group>"; };
 		F6F8C0D91B757BCA00B82B1B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		F6F8C0DB1B76A06C00B82B1B /* Mixpanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mixpanel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -413,7 +411,6 @@
 			children = (
 				7A40362019DDEF0D007B6E8F /* Platforms */,
 				7A046D7519E84C36004C4763 /* MainScene.swift */,
-				F6F8C0DB1B76A06C00B82B1B /* Mixpanel.swift */,
 				F66C7F231B6BF092009C818D /* GameOver.swift */,
 				F6F8C0CF1B75314E00B82B1B /* GameCenterInteractor.swift */,
 				F6F8C09A1B73DE3A00B82B1B /* Attributions.swift */,
@@ -803,7 +800,6 @@
 				5B121038197487F2004C1E1D /* AppDelegate.m in Sources */,
 				F6F8C0D01B75314E00B82B1B /* GameCenterInteractor.swift in Sources */,
 				F61617891B61AD77000DEA26 /* Stones.swift in Sources */,
-				F6F8C0DC1B76A06C00B82B1B /* Mixpanel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

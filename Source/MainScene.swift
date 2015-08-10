@@ -2,6 +2,8 @@ import Foundation
 
 import GameKit
 
+import Mixpanel
+
 enum GameState {
     case Ready, Playing, GameOver
 }
@@ -11,6 +13,8 @@ enum GameLevel {
 }
 
 class MainScene: CCNode, CCPhysicsCollisionDelegate {
+    
+    var mixpanel = Mixpanel.sharedInstance()
     
     weak var stik: CCSprite!
     
@@ -52,6 +56,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var attributionScreen: Attributions!
     var gameOverScreen: GameOver!
     
+    var stikHeight : CGFloat!
+    
     var yStik : CGFloat!   //StiK y pos
     var xStik : CGFloat!    // StiK x pos
     var yBlock : CGFloat! //square block y pos
@@ -91,7 +97,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         
         setUpGameCenter()
         
-//        gamePhysicsNode.debugDraw = true
+        //gamePhysicsNode.debugDraw = true
         
         gamePhysicsNode.collisionDelegate = self
         
@@ -105,9 +111,11 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     override func onEnter() {
         squareblock.position.x = screenWidth / 2
-        squareblock.position.y = screenWidth * 0.1
+
         stik.position.x = screenWidth / 2
-        stik.position.y = screenHeight * 0.53
+        
+        stikHeight = stik.position.y
+
         super.onEnter()
     }
     
@@ -154,6 +162,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         // MARK: Controls
         if gameState == .Playing {
             
+            println(yStik)
+            println(2 * stikHeight/3)
+            
             var xForce = CGFloat(1650)
             
             // tap sides; can only tap between current y pos of stik and y pos of block
@@ -165,7 +176,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
                 tapLeft.runAction(CCActionFadeOut(duration: 0.3))
                 
                 // Steriods, So ppl have a chance to bring the stick up wen its low
-                if yStik < 2 * screenHeight/5 {
+                if yStik < 2 * stikHeight/3 {
                     stik.physicsBody.applyImpulse(ccpMult(launchDirection, 3300))
                 }
                 
@@ -177,7 +188,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
                 tapRight.runAction(CCActionFadeOut(duration: 0.3))
                 
                 // Steriods, So ppl have a chance to bring the stick up wen its low
-                if yStik < 2 * screenHeight/5 {
+                if yStik < 2 * stikHeight/3{
                     stik.physicsBody.applyImpulse(ccpMult(launchDirection, -(3300)))
                 }
             }
@@ -308,10 +319,6 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             
             // MARK: difficultyScaling
             
-            if gameLevel == .Begin {
-                mixpanel.track("Level Complete", parameters: ["Level": "Begin"])
-            }
-            
             if gameLevel == .Begin && Int(gameTimer) == 6 {
   
                 //fade out the instruction box
@@ -333,7 +340,6 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .Early {
                 waveRate = 3
-                mixpanel.track("Level Complete", parameters: ["Level": "Early"])
                 
                 if Int(gameTimer) == 18 {
                     
@@ -342,7 +348,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .EarlyMid {
                 waveRate = 2.5
-                mixpanel.track("Level Complete", parameters: ["Level": "EarlyMid"])
+               
                 
                 if Int(gameTimer) ==  23{
                     gameLevel = .Mid
@@ -350,7 +356,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .Mid {
                 waveRate = 2
-                mixpanel.track("Level Complete", parameters: ["Level": "Mid"])
+                
                 
                 if Int(gameTimer) == 29 {
                     
@@ -359,7 +365,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .LateMid {
                 waveRate = 1.7
-                mixpanel.track("Level Complete", parameters: ["Level": "LateMid"])
+                
                 
                 if Int(gameTimer) >= 40 {
                     
@@ -368,7 +374,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .Late {
                 waveRate = 1.5
-                mixpanel.track("Level Complete", parameters: ["Level": "Late"])
+                
                 
                 if Int(gameTimer) >=  50 {
                     
@@ -377,7 +383,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .VeryLate {
                 waveRate = 1.2
-                mixpanel.track("Level Complete", parameters: ["Level": "VeryLate"])
+                
                 
                 if Int(gameTimer) == 56 {
                     
@@ -386,7 +392,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .AlmostGod {
                 waveRate = 1
-                mixpanel.track("Level Complete", parameters: ["Level": "AlmostGod"])
+                
                 
                 if Int(gameTimer) == 120 {
                     gameLevel = .God
@@ -394,7 +400,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .God {
                 waveRate = 0.5
-                mixpanel.track("Level Complete", parameters: ["Level": "God"])
+                
                 
             }
             if anotherWaveTimer >= waveRate {
@@ -449,8 +455,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         
         dropDownLastScore()
         
-        //restart()
-    }
+        mixpanel.track("lastScore", properties: ["Score":String(lastScore)])
+   }
     
     func attributions() {
         

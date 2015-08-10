@@ -8,9 +8,13 @@
 
 import Foundation
 
+import Mixpanel
+
 import GameKit
 
 class GameOver: CCNode {
+    
+    var mixpanel = Mixpanel.sharedInstance()
     
     weak var infoButton: CCButton!
     weak var leaderboardButton: CCButton!
@@ -35,7 +39,6 @@ class GameOver: CCNode {
     }
     
     func openGameCenter() {
-        mixpanel.track("Open Leaderboard", parameters: ["LeaderboardType": "Game Center"])
         showLeaderboard()
     }
     
@@ -58,7 +61,7 @@ class GameOver: CCNode {
     
     func shareButtonTapped() {
         
-        mixpanel.track("Share", parameters: ["ShareType": "Share Button"])
+        mixpanel.track("ButtonPressed", properties: ["ButtonType": "Share"])
         
         var scene = CCDirector.sharedDirector().runningScene
         var node: AnyObject = scene.children[0]
@@ -91,6 +94,7 @@ class GameOver: CCNode {
 extension GameOver: GKGameCenterControllerDelegate {
     
     func showLeaderboard() {
+        mixpanel.track("ButtonPressed", properties: ["ButtonType": "Game Center"])
         var viewController = CCDirector.sharedDirector().parentViewController!
         var gameCenterViewController = GKGameCenterViewController()
         gameCenterViewController.gameCenterDelegate = self
