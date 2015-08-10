@@ -222,6 +222,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     func ccPhysicsCollisionPostSolve(pair: CCPhysicsCollisionPair!, coin: Coins!, stik: CCSprite!) {
         score += 3
         pulseScore()
+         mixpanel.track("gotCoin", properties: ["Coin": "Coin"])
         coin.removeFromParent()
         coins.removeAtIndex(find(coins, coin)!)
     }

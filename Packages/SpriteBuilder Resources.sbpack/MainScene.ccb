@@ -1223,8 +1223,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>0.35603809356689453</real>
-							<real>0.3114396333694458</real>
+							<real>0.5</real>
+							<real>0.31000000238418579</real>
 							<integer>1</integer>
 							<integer>2</integer>
 							<integer>2</integer>
@@ -1856,6 +1856,8 @@
 				<string></string>
 				<key>displayName</key>
 				<string>scoreLabel</string>
+				<key>locked</key>
+				<true/>
 				<key>memberVarAssignmentName</key>
 				<string>scoreLabel</string>
 				<key>memberVarAssignmentType</key>
@@ -2972,8 +2974,6 @@
 						<array/>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -3180,7 +3180,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>1</real>
+			<real>2</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
