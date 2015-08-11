@@ -33,22 +33,27 @@ class GameOver: CCNode {
         }
     }
     
-    override func  onEnter() {
+    override func onEnter() {
         checkForNewHighScores()
         super.onEnter()
     }
     
-    func openGameCenter() {
-        showLeaderboard()
-    }
+//    func openGameCenter() {
+//        showLeaderboard()
+//    }
     
     func reportHighScoreToGameCenter(){
+
         var scoreReporter = GKScore(leaderboardIdentifier: "StiKsandStonesLeaderboard")
         scoreReporter.value = Int64(highScore)
         var scoreArray: [GKScore] = [scoreReporter]
         GKScore.reportScores(scoreArray, withCompletionHandler: {(error : NSError!) -> Void in
-            if error != nil {
-                println("Game Center: Score Submission Error")
+            if error != nil
+            {
+
+            } else {
+
+
             }
         })
     }
@@ -98,6 +103,8 @@ extension GameOver: GKGameCenterControllerDelegate {
         var viewController = CCDirector.sharedDirector().parentViewController!
         var gameCenterViewController = GKGameCenterViewController()
         gameCenterViewController.gameCenterDelegate = self
+        gameCenterViewController.viewState = GKGameCenterViewControllerState.Leaderboards
+        gameCenterViewController.leaderboardIdentifier = "StiKsandStonesSinglePlayerLeaderboard"
         viewController.presentViewController(gameCenterViewController, animated: true, completion: nil)
     }
 
