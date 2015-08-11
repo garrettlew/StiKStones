@@ -9,7 +9,7 @@ enum GameState {
 }
 
 enum GameLevel {
-    case Begin, Early, EarlyMid, Mid, LateMid, Late, VeryLate, AlmostGod, God
+    case Begin, Early, EarlyMid, Mid, LateMid, Late, Pro, ZenMaster, Enlightened, God
 }
 
 class MainScene: CCNode, CCPhysicsCollisionDelegate {
@@ -53,6 +53,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var gameState: GameState = .Ready
     var gameLevel: GameLevel = .Begin
     
+    var gameLevelString: String = "Begin"
+    
     var attributionScreen: Attributions!
     var gameOverScreen: GameOver!
     
@@ -67,6 +69,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var stones : [CCNode] = []
     
     var coins : [CCNode] = []
+    
+    var bonusPoints: Int = 0
     
     let screenHeight = CCDirector.sharedDirector().viewSize().height
     let screenWidth = CCDirector.sharedDirector().viewSize().width
@@ -162,9 +166,6 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         // MARK: Controls
         if gameState == .Playing {
             
-            println(yStik)
-            println(2 * stikHeight/3)
-            
             var xForce = CGFloat(1650)
             
             // tap sides; can only tap between current y pos of stik and y pos of block
@@ -222,7 +223,6 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     func ccPhysicsCollisionPostSolve(pair: CCPhysicsCollisionPair!, coin: Coins!, stik: CCSprite!) {
         score += 3
         pulseScore()
-         mixpanel.track("gotCoin", properties: ["Coin": "Coin"])
         coin.removeFromParent()
         coins.removeAtIndex(find(coins, coin)!)
     }
@@ -341,6 +341,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .Early {
                 waveRate = 3
+                gameLevelString = "Early"
                 
                 if Int(gameTimer) == 18 {
                     
@@ -349,7 +350,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .EarlyMid {
                 waveRate = 2.5
-               
+                gameLevelString = "EarlyMid"
                 
                 if Int(gameTimer) ==  23{
                     gameLevel = .Mid
@@ -357,7 +358,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .Mid {
                 waveRate = 2
-                
+                gameLevelString = "Mid"
                 
                 if Int(gameTimer) == 29 {
                     
@@ -366,7 +367,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .LateMid {
                 waveRate = 1.7
-                
+                gameLevelString = "LateMid"
                 
                 if Int(gameTimer) >= 40 {
                     
@@ -375,33 +376,41 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             if gameLevel == .Late {
                 waveRate = 1.5
-                
+                gameLevelString = "Late"
                 
                 if Int(gameTimer) >=  50 {
                     
-                    gameLevel = .VeryLate
+                    gameLevel = .Pro
                 }
             }
-            if gameLevel == .VeryLate {
+            if gameLevel == .Pro {
                 waveRate = 1.2
-                
+                gameLevelString = "Pro"
                 
                 if Int(gameTimer) == 56 {
                     
-                    gameLevel = .AlmostGod
+                    gameLevel = .ZenMaster
                 }
             }
-            if gameLevel == .AlmostGod {
+            if gameLevel == .ZenMaster {
                 waveRate = 1
-                
+                gameLevelString = "ZenMaster"
                 
                 if Int(gameTimer) == 120 {
+                    gameLevel = .Enlightened
+                }
+            }
+            if gameLevel == .Enlightened {
+                waveRate = 0.5
+                gameLevelString = "Enlightened"
+                
+                if Int(gameTimer) == 180 {
                     gameLevel = .God
                 }
             }
             if gameLevel == .God {
-                waveRate = 0.5
-                
+                waveRate = 0.3
+                gameLevelString = "God"
                 
             }
             if anotherWaveTimer >= waveRate {
@@ -454,10 +463,15 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             
         }
         
+        bonusPoints = Int(score) - Int(gameTimer)
+    
+        mixpanel.track("Level Reached", properties: ["Level":gameLevelString])
+        
+        mixpanel.track("Bonus Points", properties: ["Coins": String(bonusPoints)])
+        
         dropDownLastScore()
         
-        mixpanel.track("lastScore", properties: ["Score":String(lastScore)])
-   }
+    }
     
     func attributions() {
         
