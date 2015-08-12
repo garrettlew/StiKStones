@@ -177,8 +177,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
                 tapLeft.runAction(CCActionFadeOut(duration: 0.3))
                 
                 // Steriods, So ppl have a chance to bring the stick up wen its low
-                if yStik < 2 * stikHeight/3 {
-                    stik.physicsBody.applyImpulse(ccpMult(launchDirection, 3300))
+                if yStik < 4 * stikHeight/5 {
+                    stik.physicsBody.applyImpulse(ccpMult(launchDirection, 3200))
                 }
                 
             } else {
@@ -189,8 +189,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
                 tapRight.runAction(CCActionFadeOut(duration: 0.3))
                 
                 // Steriods, So ppl have a chance to bring the stick up wen its low
-                if yStik < 2 * stikHeight/3{
-                    stik.physicsBody.applyImpulse(ccpMult(launchDirection, -(3300)))
+                if yStik < 4 * stikHeight/5 {
+                    stik.physicsBody.applyImpulse(ccpMult(launchDirection, -(3200)))
                 }
             }
         }
@@ -295,6 +295,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     override func update(delta: CCTime) {
         
         if gameState == .Playing {
+            
+            println(yStik)
+            println(4 * stikHeight/5)
             
             xStik = stik.position.x
             
