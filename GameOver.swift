@@ -44,7 +44,7 @@ class GameOver: CCNode {
     
     func reportHighScoreToGameCenter(){
 
-        var scoreReporter = GKScore(leaderboardIdentifier: "StiKsandStonesLeaderboard")
+        var scoreReporter = GKScore(leaderboardIdentifier: "StiKsandStonesSinglePlayerLeaderboard")
         scoreReporter.value = Int64(highScore)
         var scoreArray: [GKScore] = [scoreReporter]
         GKScore.reportScores(scoreArray, withCompletionHandler: {(error : NSError!) -> Void in
