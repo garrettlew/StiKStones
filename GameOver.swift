@@ -79,6 +79,9 @@ class GameOver: CCNode {
             UIActivityTypeAddToReadingList, UIActivityTypePostToTencentWeibo]
         
         var controller = UIActivityViewController(activityItems: itemsToShare, applicationActivities: nil)
+        if controller.respondsToSelector(Selector("popoverPresentationController")) {
+            controller.popoverPresentationController?.sourceView  = UIApplication.sharedApplication().keyWindow?.rootViewController?.view
+        }
         controller.excludedActivityTypes = excludedActivities
         UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(controller, animated: true, completion: nil)
         
